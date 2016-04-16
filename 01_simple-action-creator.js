@@ -1,4 +1,4 @@
-// 第一章 simple-action-creator.js
+// 第一节 simple-action-creator.js
 
 // 我们来开始说说介绍里面说的actions但是什么是那些"action creator"呢？
 // 并且为什么称他们为"actions"?
