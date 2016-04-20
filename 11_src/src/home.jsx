@@ -68,7 +68,92 @@ class Home extends React.Component {
 		this.props.dispatch(actionCreators.getTime(delay));
 	}
 	render () {
-		
+		// 感谢connect我们这样就可以从props中获取我们需要的特性数据。
+		var { frozen, time, reduxState } = this.props;
+		var attrs = {};
+		const DELAY = 500;
+
+		if (frozen) {
+			attrs = {
+				disabled: true,
+			}
+		}
+
+		return (
+		      <div>
+		        <h1>Provider and connect example</h1>
+		        <span>
+		          <b>What time is it?</b> { time ? `It is currently ${time}` : 'No idea yet...' }
+		        </span>
+		        <br /> <br />
+		        <i>
+		          When clicking the button below, the time will be provided after a {DELAY}ms delay.<br />
+		          Try to change this value (in <b>src/home.jsx - line 95</b>) to verify that the delay given correctly impacts our UI.
+		        </i>
+		        <br />
+		        {/* We register our button "onClick" handler here: */}
+		        <button { ...attrs } onClick={() => this.onTimeButtonClick(DELAY)}>Get time!</button>
+		        <pre>
+		          redux state = { JSON.stringify(reduxState, null, 2) }
+		        </pre>
+		      </div>
+		    )
+		  }
 	}
 }
 
+// 这是我们用于从state数据中截取我们想要暴露给组件的选择函数。
+// 将以props的方式流入component中
+const mapStateToProps = (state /*, props*/) = {
+	return {
+		frozen: state._time.frozen,
+		time: state._time.time,
+		// 像我们这样（reduxState: state）传入整个state将是非常糟糕的实践
+		// 你可以看看主要版本页面，从这里了解更多
+		// https://github.com/rackt/react-redux/blob/v4.0.0/docs/api.md#inject-dispatch-and-every-field-in-the-global-state
+		reduxState: state,
+	}
+}
+
+const ConnectedHome = connect(mapStateToProps)(Home)
+
+export default ConnectedHome;
+
+// 你可能在这里注意到了，归功于redux我们可以有一个动态的component用于提供我们需要的state数据。
+// （保持当前状态），state将不再需要在component中出现了。我们的components只需要用props来接收我们需要的data即可。
+// 我们这里只需要一个无state状态的component。你应该总是在应用中去用一些无状态的组件来做。（以dumb components为代表）
+// 这样比有状态的组件可以更好的进行复用。建议是在 onTimeButtonClick事件中。我们可以通过connect的第二个参数（mapDispatch）像在回调中传prop的方式.
+// 这样做了以后我们能够将我们的事件行为脱离出我们的component。使它能够在不同的点击事件行为中更好的重用。
+// 可重用性看上去是一个很好的复用策略，但是有一个可重用的组件同样意味着。一个组件可以很好很方便的进行测试。（因为你可以不管你的数据和行为而将其注入其中这样就可以很好的进行测试了）
+
+// 在我们继续 ./12_final-words.js之前，我们继续来阅读一下下方的connect HOC的可代替方案。
+
+// 因为connect(...)返回了一个可以接受class和返回另一个class的方案，你能够用其作为es7的装饰者方案来实现你想象的那样。
+// 装饰者模式是es7的试验性特性可以用注释的语言来修改类和熟悉(https://github.com/wycats/javascript-decorators).
+
+// 这个特性被用作试验，因为这可能会变或者破坏。这意味着当年在当下用它的时候，必须意识到我们必须接受它解决方案的不确定行。
+// 装饰者提供了一个用于写一些不同的轻量级方案的语法糖。你可以像这样写
+
+// class MyClass {}
+// export default somedecorator(MyClass)
+
+// // 你同样可以写
+
+// @somedecorator
+// export default class MyClass {}
+
+// 应用到这个redux connect的你可以替换如下
+// let mapStateToProps = (state) => { ... }
+// class MyClass {}
+// export default connect(mapStateToProps)(MyClass)
+
+// let mapStateToProps = (state) => { ... }
+// @connect(mapStateToProps)
+// export default class MyClass {}
+
+// 当你这些在应用中用HOC function构建的component用例的时候现在可以用（@connect(mapStateToProps)）代替调用自身的方式（@connect(mapStateToProps)(Myclass)）去映射到上面。
+// 有些人喜欢这种优雅的方式，另一些却不喜欢这样，认为这样会隐藏这里面珍珠发生了什么令很多人不知道里面真正发生了什么。
+// 了解装饰者模式到现在还只是一个试验熟悉。你可以决定那种connect的方法你更喜欢。
+// 你也不用惊讶于在不同文章，教程，快速上手中不同的语法结构。
+
+// 我们到 ./12_final-words.js 进行我们接下去最后的建议...
