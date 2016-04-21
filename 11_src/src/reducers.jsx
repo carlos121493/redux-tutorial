@@ -24,7 +24,7 @@ export function _time(state = initialTimeState, action) {
 				time: action.result.time,
 				frozen: false,
 			}
-		case 'GET_TIME_FAILURE'
+		case 'GET_TIME_FAILURE':
 			// 我们可以在这里加一些报错信息，用于在项目的部分地方显示
 			return {
 				...state,

@@ -1,5 +1,5 @@
 var webpack = require('webpack')
-var webpackDevServer = require('webpack-dev-server');
+var WebpackDevServer = require('webpack-dev-server');
 var getConfig = require('../webpack.config');
 
 const webpackDevHost = 'localhost'
@@ -9,7 +9,7 @@ export default {
 		const webpackDevPort = serverPort + 1
 		const config = getConfig(webpackDevPort);
 
-		const webpackDevServer = new webpackDevServer(
+		const webpackDevServer = new WebpackDevServer(
 			webpack(config),
 			{
 				publicPath: config.output.publicPath,

@@ -31,9 +31,9 @@ import server from './11_src/src/server'
 const port = 5050
 
 // 启动我们webpack dev server。。。
-// webpackDevServer.listen(port);
+webpackDevServer.listen(port);
 // 我们主要的服务器
-// server.listen(port);
+server.listen(port);
 
 console.log(`Server is listening on http://127.0.0.1:${port}`)
 

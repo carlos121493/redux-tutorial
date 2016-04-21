@@ -15,7 +15,7 @@ import Application from './appliaction';
 const store = createStore();
 
 // 现在，我们可以用ReactDom.render来渲染我们的应用（归功于es的引入方式
-import { render } from 'react-dom';）
+// import { render } from 'react-dom')
 
 render(
 	// 并且提供一个Redux store参数到我们的根component，这样Redux Provider便可以正常运作。

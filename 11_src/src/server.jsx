@@ -27,7 +27,7 @@ var server = http.createServer(function(req, res) {
 
 	// 当然的，这里有我们的应用HTML我们将把其返回到浏览器端。
 	// 这里没什么特别的，除了我们应用的js集合的URI。这些指向我们的webpack dev server
-	(located at http://localhost:5051)
+	// (located at http://localhost:5051)
 
 	res.write(
 		`<!DOCTYPE html>
