@@ -51,12 +51,12 @@
 
 // 来我吗看看它的构成（通过转换成可读性强的es5）
 
-var thunkMiddleware = function({dispatch, getState}) {
-	// console.log('Enter thunkMiddleware')
-	retrun function(next) {
-		// console.log('Function "next" provided:', next);
-		retrun function (action) {
-			// console.log('Handling action:', action);
+const thunkMiddleware = function({dispatch, getState}) {
+	console.log('Enter thunkMiddleware')
+	return (next) => {
+		console.log('Function "next" provided:', next);
+		return action => {
+			console.log('Handling action:', action);
 			return typeof action === 'function' ? action(dispatch, getState) : next(action)
 		}
 	}
@@ -69,9 +69,9 @@ var thunkMiddleware = function({dispatch, getState}) {
 // 引用自 https://github.com/rackt/redux/blob/v1.0.0-rc/src/utils/applyMiddleware.js
 // 来让我们看看我们如何集成这些middleware在一个Redux store中。
 
-// import { createStore, combineReducers, applyMiddleware } from 'redux'
+import { createStore, combineReducers, applyMiddleware } from 'redux'
 
-// const finalCreateStore = applyMiddleware(thunkMiddleware)(createStore)
+const finalCreateStore = applyMiddleware(thunkMiddleware)(createStore)
 // 如果有更多的中间件，试着写下： applyMiddleware(middleware1, middleware2, ...)(createStore)
 
 var reducer = combineReducers({
@@ -108,6 +108,9 @@ var asyncSayActionCreator_1 = function (message) {
         }, 2000)
     }
 }
+console.log("\n", new Date(), 'Running our async action creator:', "\n")
+
+store_0.dispatch(asyncSayActionCreator_1('Hi'))
 // 输出:
 //     Mon Aug 03 2015 00:01:20 GMT+0200 (CEST) Running our async action creator:
 //     Mon Aug 03 2015 00:01:22 GMT+0200 (CEST) 'Dispatch action now:'
@@ -117,7 +120,7 @@ var asyncSayActionCreator_1 = function (message) {
 // 为了满足你的好奇心，接下来我们演示一下一个中间件如何记录将被dispatch的actions
 // 就像下面这样
 
-function logMiddleware ({ dispatch, getState }) {
+function logMiddleware ({dispatch, getState}) {
     return function(next) {
         return function (action) {
             console.log('logMiddleware action received:', action)
@@ -127,7 +130,7 @@ function logMiddleware ({ dispatch, getState }) {
 }
 
 // 同样但下面这个会组织所有的将被dispatch的actions（尽管不是很有用，但是加上更多逻辑后可以更有选择的过滤一些actions到下一个middleware或者Redux）
-function discardMiddleware ({ dispatch, getState }) {
+function discardMiddleware ({dispatch, getState}) {
     return function(next) {
         return function (action) {
             console.log('discardMiddleware action received:', action)
