@@ -44,7 +44,7 @@
 // 让我们再来试试
 import { createStore } from 'redux'
 
-var store = createStore(() => {})
+var store = createStore(() => {});
 
 // 看上去现在好了
 
